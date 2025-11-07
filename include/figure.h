@@ -5,6 +5,8 @@
 #include <utility>
 #include <iostream>
 #include <vector>
+#include <point.h>
+#include <memory>
 
 template <typename T> class Figure{
     public:
@@ -29,7 +31,7 @@ template <typename T> class Figure{
     virtual bool is_valid() const;
     Figure(size_t number_of_coords);
     size_t number_of_coords;
-    std::vector<std::pair<T, T>> coords;
+    std::vector<std::unique_ptr<Point<T>>> coords;
 };
 
 #endif

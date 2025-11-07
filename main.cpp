@@ -1,13 +1,13 @@
 #include "figure.h"
 #include "array.h"
-#include "rhombus.h"
+#include "octangle.h"
 #include "five_side.h"
 #include "six_side.h"
 #include <iostream>
 
 int main(){
 
-    std::vector<std::pair<double, double>> rhombus_coords = {{2, 2}, {4, 0},{2, -2}, {0, 0} };
+    std::vector<std::pair<double, double>> octangle_coords = {{2, 2}, {4, 0},{2, -2}, {0, 0}, {1, 1}, {3, 1}, {3, -1}, {1, -1} };
 
     Rhombus rhombus(rhombus_coords);
     std::cout << rhombus.who_am_i() << " area: " << double(rhombus) << std::endl;

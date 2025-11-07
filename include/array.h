@@ -2,11 +2,12 @@
 #define ARRAY_H
 #include "figure.h"
 #include <string>
+#include <memory>
 
+template <typename T>
 class Array{
     public:
     Array();
-    Array(const std::initializer_list<Figure*>& lst);
     Array(const Array& other);
     Array(Array&& other) noexcept;
 
@@ -16,12 +17,12 @@ class Array{
     void print_info() const;
     double total_area() const;
     void remove_figure(size_t i);
-    void add_figure(Figure* fig);
-    ~Array() noexcept;
+    void add_figure(std::shared_ptr<Figure<T>> fig);
+    ~Array() noexcept = default;
 
     private:
     size_t length;
-    Figure** array_of_figures;
+    std::unique_ptr<std::shared_ptr<Figure<T>>[]> array_of_figures;
     size_t capacity;
 
     void grow();
