@@ -1,48 +1,65 @@
 #include "figure.h"
 #include "array.h"
+#include "pentagon.h"
+#include "hexagon.h"
 #include "octangle.h"
-#include "five_side.h"
-#include "six_side.h"
+#include "point.h"
 #include <iostream>
+#include <memory>
+#include <sstream>
 
-int main(){
+std::vector<std::unique_ptr<Point<double>>> create_points_vector(
+    const std::vector<std::pair<double, double>>& coords) 
+{
+    std::vector<std::unique_ptr<Point<double>>> points;
+    points.reserve(coords.size());
+    for (const auto& [x, y] : coords) {
+        points.push_back(std::make_unique<Point<double>>(x, y));
+    }
+    return points;
+}
 
-    std::vector<std::pair<double, double>> octangle_coords = {{2, 2}, {4, 0},{2, -2}, {0, 0}, {1, 1}, {3, 1}, {3, -1}, {1, -1} };
+int main() {
+    std::vector<std::pair<double, double>> pent_coords{
+        {0.0, 4.0}, {-3.0, 1.0}, {-2.0, -3.0}, {2.0, -3.0}, {3.0, 1.0}
+    };
+    std::vector<std::pair<double, double>> hex_coords{
+        {0.0, 2.0}, {-2.0, 1.0}, {-2.0, -1.0}, {0.0, -2.0}, {2.0, -1.0}, {2.0, 1.0}
+    };
+    std::vector<std::pair<double, double>> oct_coords{
+        {1.0, 3.0}, {3.0, 1.0}, {3.0, -1.0}, {1.0, -3.0},
+        {-1.0, -3.0}, {-3.0, -1.0}, {-3.0, 1.0}, {-1.0, 3.0}
+    };
 
-    Rhombus rhombus(rhombus_coords);
-    std::cout << rhombus.who_am_i() << " area: " << double(rhombus) << std::endl;
-    std::cout << rhombus;
-    // Rhombus rhombus2;
-    // std::cin >> rhombus2;
-    // std::cout << rhombus2.who_am_i() << " area: " << double(rhombus2) << std::endl;
-    // std::cout << rhombus2;
+    auto pent_points = create_points_vector(pent_coords);
+    auto hex_points  = create_points_vector(hex_coords);
+    auto oct_points  = create_points_vector(oct_coords);
 
-    std::vector<std::pair<double, double>> pentagon_coords = {{0, 4}, {-3, 1}, {-2, -3}, {2, -3}, {3, 1}};
-    Five_Side pentagon(pentagon_coords);
+    std::shared_ptr<Pentagon<double>> pent_ptr = std::make_shared<Pentagon<double>>(pent_points);
+    std::shared_ptr<Hexagon<double>>  hex_ptr  = std::make_shared<Hexagon<double>>(hex_points);
+    std::shared_ptr<Octangle<double>> oct_ptr  = std::make_shared<Octangle<double>>(oct_points);
 
-    std::cout << pentagon.who_am_i() << " area: " << double(pentagon) << std::endl;
+    Array<Figure<double>> arr;
+    arr.add_figure(pent_ptr);
+    arr.add_figure(hex_ptr);
+    arr.add_figure(oct_ptr);
 
-    std::vector<std::pair<double, double>> hexagon_coords = {{0, 2}, {-2, 1}, {-2, -1}, {0, -2}, {2, -1}, {2, 1}};
-    Six_Side hexagon(hexagon_coords);
+    std::cout << "Initial figures info:\n";
+    arr.print_info();
+    std::cout << "Total area: " << arr.total_area() << "\n\n";
 
-    std::cout << hexagon.who_am_i() << " area: " << double(hexagon) << std::endl;
+    arr.remove_figure(1);
+    std::cout << "After removing figure 2:\n";
+    arr.print_info();
+    std::cout << "Total area: " << arr.total_area() << "\n\n";
 
-    Array my_array{&rhombus, &pentagon, &hexagon};
+    std::istringstream iss("0 4 -3 1 -2 -3 2 -3 3 1");
+    Pentagon<double> read_fig;
 
-    my_array.print_info(); 
-    my_array.remove_figure(1);
-    my_array.print_info();
+    iss >> read_fig;
+    std::cout << "Read figure (from stream):\n";
+    std::cout << read_fig;
+    std::cout << "Area: " << double(read_fig) << "\n";
 
-    std::vector<std::pair<double, double>> rhombus_coords3 = {{0, 2}, {1, 0}, {0, -2}, {-1, 0}};
-    std::vector<std::pair<double, double>> rhombus_coords4 = {{0, 3}, {2, 0}, {0, -3}, {-2, 0}};
-
-    Rhombus romb3(rhombus_coords3);
-    Rhombus romb4(rhombus_coords4);
-    std::cout << my_array.total_area() << std::endl;
-    my_array.add_figure(&romb3);
-    my_array.add_figure(&romb4);
-    std::cout << "------------------" << std::endl;
-    my_array.print_info();
-    std::cout << my_array.total_area() << std::endl;
     return 0;
 }
