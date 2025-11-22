@@ -7,6 +7,7 @@ concept Scalar = std::is_arithmetic_v<T>;
 template <Scalar T> 
 class Point {
 public:
+    Point() = default;
     Point(T x, T y) : x(x), y(y) {}
     ~Point() = default;
     

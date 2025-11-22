@@ -26,7 +26,7 @@ public:
     virtual void generate_points();
 
     std::pair<T, T> geom_centre() const;
-    operator double() const; // площадь
+    operator double() const; 
 
     Figure& operator=(const Figure& other);
     Figure& operator=(Figure&& other) noexcept;
@@ -47,7 +47,6 @@ protected:
 template <typename T>
 Figure<T>::Figure(const Point<T>& center, T radius)
     : center(center), radius(radius) {
-    generate_points();
 }
 
 template <typename T>

@@ -18,6 +18,9 @@ class Array{
     double total_area() const;
     void remove_figure(size_t i);
     void add_figure(std::shared_ptr<T> fig);
+    size_t size(){
+        return length;
+    }
     ~Array() noexcept = default;
 
     private:
