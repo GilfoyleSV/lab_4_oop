@@ -3,41 +3,24 @@
 
 template <typename T>
 class Hexagon : public Figure<T> {
-    public:
+public:
     Hexagon();
-    Hexagon(std::vector<std::unique_ptr<Point<T>>>& coords); 
+    Hexagon(const Point<T>& center, T radius);
 
     const std::string who_am_i() const override;
-    bool is_valid() const override; 
+    size_t vertex_count() const override { return 6; }
+
     ~Hexagon() override = default;
 };
 
 template <typename T>
-Hexagon<T>::Hexagon(std::vector<std::unique_ptr<Point<T>>>& coords){
-    if (coords.size() != 6){
-        throw std::invalid_argument("Некорректные координаты для шестиугольника: фигура не является шестиугольником или имеет не 6 точек.");
-    }
-    this->number_of_coords = 6;
-    this->coords = std::move(coords);
-}
+Hexagon<T>::Hexagon() : Figure<T>(Point<T>(0, 0), 1) {} // центр (0,0), радиус 1
 
 template <typename T>
-Hexagon<T>::Hexagon(){
-    this->number_of_coords = 6;
-    for (size_t i = 0; i < this->number_of_coords; ++i){
-        this->coords.push_back(std::make_unique<Point<T>>(0, 0));
-    }
-}
-
+Hexagon<T>::Hexagon(const Point<T>& center, T radius)
+    : Figure<T>(center, radius) {}
 
 template <typename T>
 const std::string Hexagon<T>::who_am_i() const {
     return "Hexagon";
-}
-
-template <typename T>
-bool Hexagon<T>::is_valid() const {
-    const size_t REQUIRED_POINTS = 6;
-
-    return this->number_of_coords == REQUIRED_POINTS; 
 }
